@@ -25,7 +25,7 @@ const pullRequest = (overrides: Partial<PullRequest> = {}) =>
 
 const testLayer = (repos: Record<string, FakeGitHub.FakeRepo>) =>
   Collector.layer.pipe(
-    Layer.provide(FakeGitHub.layer(repos)),
+    Layer.provide(FakeGitHub.layer({ repos })),
     Layer.provideMerge(StoresLayer),
     Layer.provide(Database.layerMemory)
   )

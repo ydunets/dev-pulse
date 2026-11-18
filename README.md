@@ -8,6 +8,8 @@ Collects data about your projects (GitHub pull requests for now) into SQLite, wi
     pnpm collect owner/repo [owner/repo ...]
     pnpm test
 
-Environment variables: `GITHUB_TOKEN`, `DEVPULSE_REPOS` (comma-separated), `DEVPULSE_DB` (default `devpulse.db`), `OTEL_EXPORTER_OTLP_ENDPOINT`.
+Runs automatically every 6 hours in GitHub Actions (`.github/workflows/collect.yml`) and saves data to `data/devpulse.db`.
+
+Environment variables: `GITHUB_TOKEN`, `DEVPULSE_REPOS` (comma-separated), `DEVPULSE_OWNERS` (comma-separated, all their repos), `DEVPULSE_DB` (default `devpulse.db`), `OTEL_EXPORTER_OTLP_ENDPOINT`.
 
 Progress notes: [progress/](progress/README.md)

@@ -9,7 +9,7 @@ import * as Tracing from "./tracing/Tracing.ts"
 export const StoresLayer = Layer.mergeAll(PullRequestStore.layer, CollectorRunStore.layer)
 
 export const AppLayer = Collector.layer.pipe(
-  Layer.provide(GitHub.layer),
+  Layer.provideMerge(GitHub.layer),
   Layer.provideMerge(StoresLayer),
   Layer.provide(Database.layer),
   Layer.provideMerge(Tracing.layer)

@@ -7,11 +7,11 @@ export interface FakeResponse {
   readonly headers?: Record<string, string>
 }
 
-export const layer = (respond: (url: URL) => FakeResponse) =>
+export const layer = (respond: (url: URL, headers: Readonly<Record<string, string>>) => FakeResponse) =>
   Layer.succeed(
     HttpClient.HttpClient,
     HttpClient.make((request, url) => {
-      const { status, body, headers } = respond(url)
+      const { status, body, headers } = respond(url, request.headers)
       const response = new Response(JSON.stringify(body), {
         status,
         headers: { "content-type": "application/json", ...headers }

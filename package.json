@@ -7,7 +7,10 @@
     "test": "vitest run",
     "collect": "tsx src/main.ts",
     "typecheck": "tsc",
-    "collect:cloud": "env -u GITHUB_TOKEN NODE_USE_ENV_PROXY=1 tsx src/main.ts"
+    "collect:cloud": "env -u GITHUB_TOKEN NODE_USE_ENV_PROXY=1 tsx src/main.ts",
+    "rules": "tsx scripts/check-rules.ts",
+    "coverage": "vitest run --coverage",
+    "verify": "pnpm typecheck && pnpm rules && pnpm coverage"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +24,7 @@
   "devDependencies": {
     "@effect/vitest": "^4.1.4",
     "@types/node": "^26.6.6",
+    "@vitest/coverage-v8": "5.1.1",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vitest": "^5.1.1"

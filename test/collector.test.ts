@@ -68,5 +68,6 @@ describe("Collector", () => {
 
       assert.strictEqual(stored.length, 1)
       assert.strictEqual(stored[0]?.state, "merged")
+      assert.strictEqual(yield* store.save([]), 0)
     }).pipe(Effect.provide(StoresLayer.pipe(Layer.provide(Database.layerMemory)))))
 })

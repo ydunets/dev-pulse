@@ -6,7 +6,7 @@ Collects data about your projects (GitHub pull requests for now) into SQLite, wi
 
     pnpm install
     pnpm collect owner/repo [owner/repo ...]
-    pnpm test
+    pnpm verify
 
 Runs automatically every 6 hours in GitHub Actions (`.github/workflows/collect.yml`) and saves data to `data/devpulse.db`.
 

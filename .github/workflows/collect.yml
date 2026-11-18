@@ -33,7 +33,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm test
+      - run: pnpm verify
 
       - run: pnpm collect
 

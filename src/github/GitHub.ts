@@ -2,7 +2,7 @@ import { Config, Context, Effect, flow, Layer, Option, Redacted, Schedule, Schem
 import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "effect/http"
 import type { PullRequest } from "../pull-requests/PullRequest.ts"
 import type { RepoSlug } from "../shared/RepoSlug.ts"
-import { GitHubError, reasonFromStatus } from "./GitHubError.ts"
+import { GitHubError, reasonFromResponse } from "./GitHubError.ts"
 import { GitHubPullRequest, toPullRequest } from "./GitHubPullRequest.ts"
 
 const withToken = (token: Option.Option<Redacted.Redacted>) => (request: HttpClientRequest.HttpClientRequest) =>
@@ -36,7 +36,8 @@ export class GitHub extends Context.Service<GitHub, {
         }).pipe(Effect.mapError((cause) => new GitHubError({ repo, reason: "Network", cause })))
 
         if (response.status >= 400) {
-          return yield* new GitHubError({ repo, reason: reasonFromStatus(response.status) })
+          const reason = reasonFromResponse(response.status, response.headers["x-ratelimit-remaining"])
+          return yield* new GitHubError({ repo, reason })
         }
 
         const items = yield* decodePullRequests(response).pipe(

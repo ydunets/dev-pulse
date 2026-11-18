@@ -7,13 +7,13 @@ import * as FakeHttpClient from "./support/FakeHttpClient.ts"
 
 const repo = Schema.decodeSync(RepoSlug)("acme/app")
 
-const fetchPullRequests = (status: number, body: unknown) =>
+const fetchPullRequests = (status: number, body: unknown, headers: Record<string, string> = {}) =>
   Effect.gen(function*() {
     const github = yield* GitHub
     return yield* github.pullRequests(repo)
   }).pipe(
     Effect.provide(GitHub.layerNoDeps.pipe(Layer.orDie)),
-    Effect.provide(FakeHttpClient.layer(() => ({ status, body })))
+    Effect.provide(FakeHttpClient.layer(() => ({ status, body, headers })))
   )
 
 describe("GitHub", () => {
@@ -41,5 +41,14 @@ describe("GitHub", () => {
     Effect.gen(function*() {
       const error = yield* Effect.flip(fetchPullRequests(200, [{ unexpected: true }]))
       assert.strictEqual(error.reason, "BadResponse")
+    }))
+
+  it.effect("tells a forbidden repo apart from an exhausted rate limit", () =>
+    Effect.gen(function*() {
+      const forbidden = yield* Effect.flip(fetchPullRequests(403, { message: "Forbidden" }))
+      const limited = yield* Effect.flip(
+        fetchPullRequests(403, { message: "API rate limit exceeded" }, { "x-ratelimit-remaining": "0" })
+      )
+      assert.deepStrictEqual([forbidden.reason, limited.reason], ["Forbidden", "RateLimited"])
     }))
 })

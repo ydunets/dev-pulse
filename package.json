@@ -6,7 +6,8 @@
   "scripts": {
     "test": "vitest run",
     "collect": "tsx src/main.ts",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "collect:cloud": "env -u GITHUB_TOKEN NODE_USE_ENV_PROXY=1 tsx src/main.ts"
   },
   "keywords": [],
   "author": "",
